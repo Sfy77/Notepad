@@ -37,12 +37,20 @@ class AntivirusApp:
         exit_btn = tk.Button(
             top_frame, text="Вийти", font=("Arial", 13, "bold"),
             bg="#800000", fg="#fff", activebackground="#a00000", activeforeground="#fff",
-            width=10, height=1, command=root.quit
+            width=10, height=1, command=self.confirm_exit
         )
         exit_btn.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
 
+        # Додаємо кнопку "Можливі оновлення" у верхній панелі праворуч
+        updates_btn = tk.Button(
+            top_frame, text="☰ Оновлення", font=("Arial", 11, "bold"),
+            bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+            width=13, height=1, command=self.show_updates_menu
+        )
+        updates_btn.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
+
         # Верхній напис
-        title = tk.Label(root, text="Антивірус", font=("Arial", 32, "bold"),
+        title = tk.Label(root, text="Антивірус", font=("Segoe UI", 32, "bold"),
                          bg=self.bg_color, fg=self.fg_color)
         title.pack(pady=20)
 
@@ -50,7 +58,7 @@ class AntivirusApp:
         btn_frame = tk.Frame(root, bg=self.bg_color)
         btn_frame.pack(pady=30)
 
-        btn_font = ("Arial", 16, "bold")
+        btn_font = ("Segoe UI", 16, "bold")
         btn_width = 18
         btn_height = 2
 
@@ -112,12 +120,12 @@ class AntivirusApp:
         self.progress.pack(pady=20)
 
         # Відсотки прогресу
-        self.progress_label = tk.Label(root, text="0%", bg=self.bg_color, fg=self.fg_color, font=("Arial", 18, "bold"))
+        self.progress_label = tk.Label(root, text="0%", bg=self.bg_color, fg=self.fg_color, font=("Segoe UI", 18, "bold"))
         self.progress_label.pack()
 
         # Відсоток безпеки комп'ютера
         self.security_label = tk.Label(
-            root, text="Безпека комп'ютера: 100%", font=("Arial", 20, "bold"),
+            root, text="Безпека комп'ютера: 100%", font=("Segoe UI", 20, "bold"),
             fg="green", bg=self.bg_color
         )
         self.security_label.pack(pady=15)
@@ -125,7 +133,7 @@ class AntivirusApp:
 
         # Лог/статус
         self.status = tk.Label(
-            root, text="Готово до роботи", anchor="w", font=("Arial", 16),
+            root, text="Готово до роботи", anchor="w", font=("Segoe UI", 16),
             bg=self.bg_color, fg=self.fg_color
         )
         self.status.pack(fill=tk.X, padx=20, pady=10)
@@ -137,6 +145,22 @@ class AntivirusApp:
             command=self.open_store, width=15, height=2
         )
         menu_btn.pack(pady=10)
+
+        # Додаємо кнопку "Оновити" під іншими кнопками (наприклад, під кнопкою "Магазин")
+        update_btn_main = tk.Button(
+            root, text="Оновити", font=("Arial", 16, "bold"),
+            bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+            command=self.show_update_progress, width=15, height=2
+        )
+        update_btn_main.pack(pady=10)
+
+        # Додаємо кнопку "Політика конфіденційності" у верхній панелі
+        privacy_btn = tk.Button(
+            top_frame, text="Політика конфіденційності", font=("Arial", 11, "bold"),
+            bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+            width=22, height=1, command=self.show_privacy_policy
+        )
+        privacy_btn.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
 
     def quick_scan(self):
         self.status.config(text="Виконується швидке сканування...")
@@ -376,6 +400,71 @@ class AntivirusApp:
         self.progress_label.config(text="100%")
         self.status.config(text="Швидкість роботи комп'ютера збільшено!")
         messagebox.showinfo("Оптимізація", "Швидкість роботи комп'ютера збільшено!")
+
+    def show_updates_menu(self):
+        updates_win = tk.Toplevel(self.root)
+        updates_win.title("Можливі оновлення")
+        updates_win.geometry("340x220")
+        updates_win.configure(bg=self.bg_color)
+        tk.Label(updates_win, text="Можливі оновлення", font=("Arial", 15, "bold"),
+                 bg=self.bg_color, fg=self.fg_color).pack(pady=10)
+        # Тут можна додати список оновлень або повідомлення
+        tk.Label(updates_win, text="Оновлення антивірусних баз доступні.\nОновіть програму для кращого захисту.",
+                 font=("Arial", 12), bg=self.bg_color, fg=self.fg_color, justify="left").pack(padx=20, pady=10)
+        tk.Button(updates_win, text="Оновити зараз", font=("Arial", 12, "bold"),
+                  bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+                  command=lambda: messagebox.showinfo("Оновлення", "Оновлення виконано!")).pack(pady=10)
+
+    def show_update_progress(self):
+        update_win = tk.Toplevel(self.root)
+        update_win.title("Оновлення")
+        update_win.geometry("340x160")
+        update_win.configure(bg=self.bg_color)
+        tk.Label(update_win, text="Оновлення антивірусу", font=("Arial", 15, "bold"),
+                 bg=self.bg_color, fg=self.fg_color).pack(pady=10)
+        tk.Label(update_win, text="Оновити антивірусні бази зараз?",
+                 font=("Arial", 12), bg=self.bg_color, fg=self.fg_color).pack(padx=20, pady=10)
+
+        def do_update():
+            messagebox.showinfo("Оновлення", "Оновлення виконано!")
+            update_win.destroy()
+
+        tk.Button(update_win, text="Оновити", font=("Arial", 12, "bold"),
+                  bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+                  command=do_update).pack(pady=15)
+
+    def show_privacy_policy(self):
+        policy_win = tk.Toplevel(self.root)
+        policy_win.title("Політика конфіденційності")
+        policy_win.geometry("600x500")
+        policy_win.configure(bg=self.bg_color)
+
+        tk.Label(policy_win, text="Політика конфіденційності", font=("Segoe UI", 20, "bold"),
+                 bg=self.bg_color, fg=self.fg_color).pack(pady=20)
+
+        policy_text = (
+            "Ми дбаємо про вашу конфіденційність!\n\n"
+            "1. Ми не збираємо особисту інформацію без вашої згоди.\n"
+            "2. Всі дані про сканування залишаються лише на вашому комп'ютері.\n"
+            "3. Ми не передаємо ваші дані третім особам.\n"
+            "4. Ви можете видалити всі свої дані у будь-який момент.\n"
+            "5. Для покращення сервісу ми можемо анонімно збирати статистику використання.\n\n"
+            "Використовуючи наш антивірус, ви погоджуєтесь із цією політикою.\n"
+            "Детальніше ви можете дізнатися, звернувшись до служби підтримки."
+        )
+
+        text_widget = tk.Text(policy_win, wrap="word", font=("Segoe UI", 13), bg="#203060", fg=self.fg_color)
+        text_widget.insert("1.0", policy_text)
+        text_widget.config(state="disabled")
+        text_widget.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
+
+        tk.Button(policy_win, text="Закрити", font=("Arial", 12, "bold"),
+                  bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+                  command=policy_win.destroy).pack(pady=10)
+
+    def confirm_exit(self):
+        if messagebox.askyesno("Вихід", "Ви дійсно хочете вийти з програми?"):
+            self.root.quit()
 
 if __name__ == "__main__":
     root = tk.Tk()
