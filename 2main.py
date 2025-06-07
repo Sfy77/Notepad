@@ -5,7 +5,7 @@ class AntivirusApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Антивірус")
-        self.root.geometry("1200x800")
+        self.root.geometry("1400x950")  # Було 1200x800, стало більше для пропорційності кнопок
 
         # Задаємо темно-синій фон і світлий текст
         self.bg_color = "#102040"
@@ -162,6 +162,14 @@ class AntivirusApp:
         )
         privacy_btn.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
 
+        # Додаємо кнопку "Допомога" у верхній панелі праворуч
+        help_btn = tk.Button(
+            top_frame, text="Допомога", font=("Arial", 11, "bold"),
+            bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+            width=13, height=1, command=self.show_help_menu
+        )
+        help_btn.pack(side=tk.RIGHT, padx=(0, 10), pady=10)
+
     def quick_scan(self):
         self.status.config(text="Виконується швидке сканування...")
         self.simulate_progress(duration=2000, step=10, after_func=lambda: self.scan_done("Швидке сканування завершено!", found_viruses=0))
@@ -306,7 +314,7 @@ class AntivirusApp:
             prod_win.destroy()  # Закриває лише вікно покупки, магазин залишається відкритим
         tk.Button(
             prod_win, text="Купити", font=("Arial", 14, "bold"),
-            bg="#304080", fg="#e0e6f0", activebackground="#4050a0", activeforeground="#e0e6f0",
+            bg="#304080", fg="#e6f0", activebackground="#4050a0", activeforeground="#e6f0",
             command=buy_and_close
         ).pack(pady=20)
 
@@ -449,7 +457,10 @@ class AntivirusApp:
             "3. Ми не передаємо ваші дані третім особам.\n"
             "4. Ви можете видалити всі свої дані у будь-який момент.\n"
             "5. Для покращення сервісу ми можемо анонімно збирати статистику використання.\n\n"
-            "Використовуючи наш антивірус, ви погоджуєтесь із цією політикою.\n"
+            "Використовуючи наш антивірус, ви погоджуєтесь із цією політикою.\n\n"
+            "Контакти для зв'язку:\n"
+            "Адміністрація: +38 (044) 123-45-67\n"
+            "Технічна підтримка: +38 (067) 765-43-21\n\n"
             "Детальніше ви можете дізнатися, звернувшись до служби підтримки."
         )
 
@@ -461,6 +472,35 @@ class AntivirusApp:
         tk.Button(policy_win, text="Закрити", font=("Arial", 12, "bold"),
                   bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
                   command=policy_win.destroy).pack(pady=10)
+
+    def show_help_menu(self):
+        help_win = tk.Toplevel(self.root)
+        help_win.title("Допомога та контакти")
+        help_win.geometry("500x350")
+        help_win.configure(bg=self.bg_color)
+
+        tk.Label(help_win, text="Допомога та контакти", font=("Segoe UI", 18, "bold"),
+                 bg=self.bg_color, fg=self.fg_color).pack(pady=15)
+
+        help_text = (
+            "Якщо у вас виникли питання або потрібна допомога, звертайтесь:\n\n"
+            "Телефон адміністрації: +38 (044) 123-45-67\n"
+            "Технічна підтримка: +38 (067) 765-43-21\n"
+            "Email: support@antivirus.ua\n"
+            "Viber: +38 (067) 765-43-21\n"
+            "Telegram: @antivirus_support\n\n"
+            "Ми завжди раді допомогти вам!\n"
+            "Детальніше — у розділі 'Політика конфіденційності'."
+        )
+
+        text_widget = tk.Text(help_win, wrap="word", font=("Segoe UI", 13), bg="#203060", fg=self.fg_color)
+        text_widget.insert("1.0", help_text)
+        text_widget.config(state="disabled")
+        text_widget.pack(expand=True, fill=tk.BOTH, padx=20, pady=10)
+
+        tk.Button(help_win, text="Закрити", font=("Arial", 12, "bold"),
+                  bg="#304080", fg=self.fg_color, activebackground="#4050a0", activeforeground=self.fg_color,
+                  command=help_win.destroy).pack(pady=10)
 
     def confirm_exit(self):
         if messagebox.askyesno("Вихід", "Ви дійсно хочете вийти з програми?"):
